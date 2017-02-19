@@ -402,25 +402,6 @@
 
   /**
    * @private
-   * to support IE8 missing getElementById on SVGdocument
-   */
-  function elementById(doc, id) {
-    var el;
-    doc.getElementById && (el = doc.getElementById(id));
-    if (el) {
-      return el;
-    }
-    var node, i, nodelist = doc.getElementsByTagName('*');
-    for (i = 0; i < nodelist.length; i++) {
-      node = nodelist[i];
-      if (id === node.getAttribute('id')) {
-        return node;
-      }
-    }
-  }
-
-  /**
-   * @private
    */
   function parseUseDirectives(doc) {
     var nodelist = _getMultipleNodes(doc, ['use', 'svg:use']), i = 0;
@@ -430,7 +411,7 @@
           xlink = el.getAttribute('xlink:href').substr(1),
           x = el.getAttribute('x') || 0,
           y = el.getAttribute('y') || 0,
-          el2 = elementById(doc, xlink).cloneNode(true),
+          el2 = doc.getElementById(xlink).cloneNode(true),
           currentTrans = (el2.getAttribute('transform') || '') + ' translate(' + x + ', ' + y + ')',
           parentNode, oldLength = nodelist.length, attr, j, attrs, l;
 
@@ -866,8 +847,7 @@
 
       // very crude parsing of style contents
       for (var i = 0, len = styles.length; i < len; i++) {
-        // IE9 doesn't support textContent, but provides text instead.
-        var styleContents = styles[i].textContent || styles[i].text;
+        var styleContents = styles[i].textContent;
 
         // remove comments
         styleContents = styleContents.replace(/\/\*[\s\S]*?\*\//g, '');

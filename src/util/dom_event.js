@@ -81,7 +81,7 @@
   if (shouldUseAddListenerRemoveListener) {
     /** @ignore */
     addListener = function (element, eventName, handler, options) {
-      // since ie10 or ie9 can use addEventListener but they do not support options, i need to check
+      // since ie10 can use addEventListener but they do not support options, i need to check
       element.addEventListener(eventName, handler, shouldUseAttachEventDetachEvent ? false : options);
     };
     /** @ignore */
