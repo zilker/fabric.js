@@ -8,7 +8,6 @@ git.status().then(async (status) => {
       let gitignore = fs.readFileSync('./.gitignore', 'utf8'),
         regex = new RegExp('/dist', 'i'),
         result = gitignore.replace(regex, '');
-      console.log(result);
 
       fs.writeFileSync('./.gitignore', result, 'utf8', function (err) {
         if (err) return console.log(err);
@@ -16,10 +15,12 @@ git.status().then(async (status) => {
       await git.add('.');
       await git.commit('Edit .gitignore to publish');
       await git.raw([
+        'subtree',
         'push',
+        '--prefix',
+        'dist',
         'origin',
-        '`git subtree split --prefix dist master`:gh-pages',
-        '--force'
+        'gh-pages'
       ]);
       await git.reset(['HEAD~']);
       await git.checkout('.gitignore');
